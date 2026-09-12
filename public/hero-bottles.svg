@@ -17,7 +17,7 @@
 <circle cx="150" cy="190" r="66" fill="#DCE9B0" opacity=".65"/><circle cx="749" cy="160" r="48" fill="#F1D898" opacity=".75"/><path d="M739 170c21-39 53-51 96-36-18 39-51 52-96 36Z" fill="#739E59"/><path d="M130 240c-7-47 13-78 59-95 5 43-15 75-59 95Z" fill="#6E9750"/>
 <g transform="translate(704 472) rotate(5)" filter="url(#photoShadow)">
   <rect x="-8" y="-8" width="180" height="278" rx="31" fill="#F8F3E7"/>
-  <g clip-path="url(#photoClip)"><image href="/real-bottles.svg" width="164" height="236" preserveAspectRatio="xMidYMid slice"/></g>
+  <g clip-path="url(#photoClip)"><image href="/product-red-bottles.svg" width="164" height="236" preserveAspectRatio="xMidYMid slice"/></g>
   <text x="16" y="255" fill="#476F38" font-size="12" font-family="Arial" font-weight="700">PRODUCTO REAL · MO VIDA</text>
 </g>
 </svg>
