@@ -1,29 +1,32 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
+        forest: "#1F5B3A",
+        leaf: "#769B55",
+        cream: "#F6F0E2",
+        mist: "#EDF2E5",
+        ink: "#163326",
+        lime: "#D9E7AA",
+        mango: "#E7AA38",
+        berry: "#9F3446",
         movida: {
           forest: "#1F5B3A",
-          leaf: "#6EA34B",
-          cream: "#F8F3E7",
-          mist: "#EEF4E7",
-          ink: "#173629",
-          sun: "#EFD78D",
-          berry: "#A72F4E",
-        },
+          leaf: "#769B55",
+          cream: "#F6F0E2",
+          mist: "#EDF2E5",
+          ink: "#163326"
+        }
       },
       boxShadow: {
-        soft: "0 24px 80px rgba(31, 91, 58, 0.12)",
-      },
-    },
+        soft: "0 24px 80px rgba(31, 91, 58, 0.12)"
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 };
 
 export default config;
