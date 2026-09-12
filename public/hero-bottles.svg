@@ -4,6 +4,8 @@
   <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#F2C55C"/><stop offset="1" stop-color="#DF8A2D"/></linearGradient>
   <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#C75B68"/><stop offset="1" stop-color="#7F263E"/></linearGradient>
   <filter id="s" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#1A3A28" flood-opacity=".20"/></filter>
+  <filter id="photoShadow" x="-30%" y="-30%" width="170%" height="170%"><feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#173629" flood-opacity=".24"/></filter>
+  <clipPath id="photoClip"><rect width="164" height="236" rx="26"/></clipPath>
 </defs>
 <ellipse cx="462" cy="705" rx="318" ry="57" fill="#224F37" opacity=".10"/>
 <g opacity=".92"><path d="M113 613c-49-58-46-113 9-164 40 48 34 111-9 164Z" fill="#96B96D"/><path d="M159 604c-12-74 13-124 78-151 11 67-18 120-78 151Z" fill="#6B9652"/><path d="M760 584c-12-69 11-120 73-152 18 65-8 119-73 152Z" fill="#7CA157"/><path d="M790 626c17-63 55-100 116-110-11 62-51 99-116 110Z" fill="#A0BC78"/></g>
@@ -13,4 +15,9 @@
   <g transform="translate(554 140) rotate(7 122 260)"><rect x="77" y="0" width="91" height="50" rx="17" fill="#1F2420"/><rect x="56" y="40" width="134" height="475" rx="52" fill="url(#g3)"/><rect x="66" y="54" width="17" height="405" rx="9" fill="white" opacity=".13"/><rect x="72" y="197" width="102" height="128" rx="22" fill="#F5F0E4" fill-opacity=".94"/><text x="91" y="241" fill="#47773B" font-size="25" font-family="Georgia, serif" font-weight="700">MO</text><text x="87" y="272" fill="#47773B" font-size="30" font-family="Georgia, serif" font-style="italic" font-weight="700">Vida</text><text x="94" y="299" fill="#805E37" font-size="9" font-family="Arial">RED BOOST</text></g>
 </g>
 <circle cx="150" cy="190" r="66" fill="#DCE9B0" opacity=".65"/><circle cx="749" cy="160" r="48" fill="#F1D898" opacity=".75"/><path d="M739 170c21-39 53-51 96-36-18 39-51 52-96 36Z" fill="#739E59"/><path d="M130 240c-7-47 13-78 59-95 5 43-15 75-59 95Z" fill="#6E9750"/>
+<g transform="translate(704 472) rotate(5)" filter="url(#photoShadow)">
+  <rect x="-8" y="-8" width="180" height="278" rx="31" fill="#F8F3E7"/>
+  <g clip-path="url(#photoClip)"><image href="/real-bottles.svg" width="164" height="236" preserveAspectRatio="xMidYMid slice"/></g>
+  <text x="16" y="255" fill="#476F38" font-size="12" font-family="Arial" font-weight="700">PRODUCTO REAL · MO VIDA</text>
+</g>
 </svg>
