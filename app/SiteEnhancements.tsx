@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { track } from "@vercel/analytics";
-import { PRODUCT_SPRITE } from "./productSprite";
 
 function classifyConversion(element: Element) {
   const anchor = element.closest("a") as HTMLAnchorElement | null;
@@ -17,11 +16,11 @@ function classifyConversion(element: Element) {
   return null;
 }
 
-function replaceAboutIllustration() {
+function simplifyAboutVisual() {
   const about = document.getElementById("nosotros");
   const grid = about?.querySelector(":scope > div.grid");
   const visual = grid?.firstElementChild as HTMLElement | null;
-  if (!visual || visual.dataset.realProductApplied === "true") return () => {};
+  if (!visual || visual.dataset.logoVisualApplied === "true") return () => {};
 
   const children = Array.from(visual.children) as HTMLElement[];
   const previousDisplays = children.map((child) => child.style.display);
@@ -29,25 +28,28 @@ function replaceAboutIllustration() {
   const previousBackgroundSize = visual.style.backgroundSize;
   const previousBackgroundPosition = visual.style.backgroundPosition;
   const previousBackgroundRepeat = visual.style.backgroundRepeat;
+  const previousBackgroundColor = visual.style.backgroundColor;
   const previousMinHeight = visual.style.minHeight;
 
   children.forEach((child) => {
     child.style.display = "none";
   });
 
-  visual.dataset.realProductApplied = "true";
-  visual.style.minHeight = "470px";
-  visual.style.backgroundImage = `url(${PRODUCT_SPRITE})`;
-  visual.style.backgroundSize = "300% 200%";
-  visual.style.backgroundPosition = "50% 100%";
+  visual.dataset.logoVisualApplied = "true";
+  visual.style.minHeight = "360px";
+  visual.style.backgroundColor = "#e8eddc";
+  visual.style.backgroundImage = "url('/movida-logo.svg')";
+  visual.style.backgroundSize = "58% auto";
+  visual.style.backgroundPosition = "center";
   visual.style.backgroundRepeat = "no-repeat";
 
   return () => {
     children.forEach((child, index) => {
       child.style.display = previousDisplays[index];
     });
-    delete visual.dataset.realProductApplied;
+    delete visual.dataset.logoVisualApplied;
     visual.style.minHeight = previousMinHeight;
+    visual.style.backgroundColor = previousBackgroundColor;
     visual.style.backgroundImage = previousBackgroundImage;
     visual.style.backgroundSize = previousBackgroundSize;
     visual.style.backgroundPosition = previousBackgroundPosition;
@@ -57,7 +59,7 @@ function replaceAboutIllustration() {
 
 export default function SiteEnhancements() {
   useEffect(() => {
-    const restoreAbout = replaceAboutIllustration();
+    const restoreAbout = simplifyAboutVisual();
 
     const onClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
