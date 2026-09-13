@@ -13,6 +13,41 @@ const realProductPositions: Record<string, string> = {
   "Detox Energía": "100% 100%",
 };
 
+function enhanceHero() {
+  const hero = document.getElementById("inicio");
+  if (!hero) return;
+
+  hero.querySelectorAll("p").forEach((node) => {
+    if (node.textContent?.trim() === "Combo Bienestar") node.textContent = "Combo Tropical";
+  });
+}
+
+function enhanceNavigation() {
+  const header = document.querySelector("header");
+  if (!header) return;
+
+  const desktopNav = header.querySelector("nav");
+  if (desktopNav && !desktopNav.querySelector('a[href="#productos-reales"]')) {
+    const link = document.createElement("a");
+    link.href = "#productos-reales";
+    link.textContent = "Productos";
+    link.className = "transition hover:text-leaf";
+    desktopNav.prepend(link);
+  }
+
+  const mobileContainer = Array.from(header.querySelectorAll("div")).find((node) =>
+    node.className.includes("space-y-1") && node.className.includes("font-semibold"),
+  );
+
+  if (mobileContainer && !mobileContainer.querySelector('a[href="#productos-reales"]')) {
+    const link = document.createElement("a");
+    link.href = "#productos-reales";
+    link.textContent = "Productos";
+    link.className = "block rounded-xl px-3 py-3 hover:bg-white/50";
+    mobileContainer.prepend(link);
+  }
+}
+
 function enhanceCatalogPhotos() {
   const menu = document.getElementById("menu");
   if (!menu) return;
@@ -74,13 +109,18 @@ function classifyConversion(element: Element) {
 
 export default function SiteEnhancements() {
   useEffect(() => {
+    enhanceHero();
+    enhanceNavigation();
     enhanceCatalogPhotos();
 
-    const menu = document.getElementById("menu");
-    const observer = menu
-      ? new MutationObserver(() => window.requestAnimationFrame(enhanceCatalogPhotos))
-      : null;
-    observer?.observe(menu!, { childList: true, subtree: true });
+    const pageObserver = new MutationObserver(() => {
+      window.requestAnimationFrame(() => {
+        enhanceHero();
+        enhanceNavigation();
+        enhanceCatalogPhotos();
+      });
+    });
+    pageObserver.observe(document.body, { childList: true, subtree: true });
 
     const onClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
@@ -95,7 +135,7 @@ export default function SiteEnhancements() {
 
     document.addEventListener("click", onClick, true);
     return () => {
-      observer?.disconnect();
+      pageObserver.disconnect();
       document.removeEventListener("click", onClick, true);
     };
   }, []);
