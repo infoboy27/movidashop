@@ -37,7 +37,7 @@ jobs:
       - name: Capture desktop and mobile audit
         run: |
           mkdir -p audit
-          cat > /tmp/audit.mjs <<'EOF'
+          cat > audit-run.mjs <<'EOF'
           import { chromium } from 'playwright';
           import fs from 'node:fs';
 
@@ -105,7 +105,7 @@ jobs:
           fs.writeFileSync('audit/report.json', JSON.stringify(results, null, 2));
           await browser.close();
           EOF
-          node /tmp/audit.mjs
+          node audit-run.mjs
 
       - name: Upload audit artifact
         uses: actions/upload-artifact@v4
