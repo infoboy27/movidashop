@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowRight, MessageCircle } from "lucide-react";
-import { PRODUCT_SPRITE } from "./productSprite";
 
 const PHONE = "18296826461";
 
@@ -12,52 +11,15 @@ type Product = {
   ingredients: string;
   price: number;
   size: string;
-  position: string;
 };
 
 const products: Product[] = [
-  {
-    name: "Tropical",
-    ingredients: "Piña · naranja · limón",
-    price: 200,
-    size: "12 oz · 355 ml",
-    position: "100% 0%",
-  },
-  {
-    name: "Fresh Mint",
-    ingredients: "Sandía · limón · menta",
-    price: 200,
-    size: "12 oz · 355 ml",
-    position: "50% 0%",
-  },
-  {
-    name: "Detox Energía",
-    ingredients: "Pepino · piña · manzana verde · espinaca · apio · limón",
-    price: 200,
-    size: "12 oz · 355 ml",
-    position: "100% 100%",
-  },
-  {
-    name: "Red Boost",
-    ingredients: "Remolacha · zanahoria · manzana roja · limón · jengibre",
-    price: 200,
-    size: "12 oz · 355 ml",
-    position: "50% 100%",
-  },
-  {
-    name: "Zanahoria Power",
-    ingredients: "Zanahoria · naranja · limón · jengibre",
-    price: 200,
-    size: "12 oz · 355 ml",
-    position: "0% 100%",
-  },
-  {
-    name: "Combo Tropical",
-    ingredients: "Jugo Tropical + Shot Detox",
-    price: 250,
-    size: "Jugo + shot",
-    position: "0% 0%",
-  },
+  { name: "Tropical", ingredients: "Piña · naranja · limón", price: 200, size: "12 oz · 355 ml" },
+  { name: "Fresh Mint", ingredients: "Sandía · limón · menta", price: 200, size: "12 oz · 355 ml" },
+  { name: "Detox Energía", ingredients: "Pepino · piña · manzana verde · espinaca · apio · limón", price: 200, size: "12 oz · 355 ml" },
+  { name: "Red Boost", ingredients: "Remolacha · zanahoria · manzana roja · limón · jengibre", price: 200, size: "12 oz · 355 ml" },
+  { name: "Zanahoria Power", ingredients: "Zanahoria · naranja · limón · jengibre", price: 200, size: "12 oz · 355 ml" },
+  { name: "Combo Tropical", ingredients: "Jugo Tropical + Shot Detox", price: 250, size: "Jugo + shot" },
 ];
 
 function productMessage(product: Product) {
@@ -79,12 +41,6 @@ export default function ProductShowcasePortal() {
     legacyMenu.style.display = "none";
     if (legacyOrderSection) legacyOrderSection.style.display = "none";
 
-    const existing = document.getElementById("product-showcase-portal-root");
-    if (existing) {
-      setMountNode(existing);
-      return;
-    }
-
     const node = document.createElement("div");
     node.id = "product-showcase-portal-root";
     legacyMenu.parentElement.insertBefore(node, legacyMenu);
@@ -102,70 +58,53 @@ export default function ProductShowcasePortal() {
 
   return createPortal(
     <section id="menu" className="border-b border-forest/10 bg-[#faf7ef]">
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mx-auto max-w-6xl px-5 py-16 lg:px-8 lg:py-20">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[.2em] text-leaf">Nuestro menú</p>
-            <h2 className="display-font mt-3 text-4xl leading-[1.02] sm:text-5xl lg:text-6xl">
+            <h2 className="display-font mt-3 text-4xl leading-[1.02] sm:text-5xl">
               Fresco, simple y <span className="italic text-leaf">listo para pedir.</span>
             </h2>
           </div>
-          <div className="max-w-md">
-            <p className="text-sm leading-6 text-ink/55">
-              Mostramos únicamente los productos para los que tenemos fotografía real de MO Vida.
-            </p>
-            <p className="mt-2 text-xs leading-5 text-ink/40">
-              Precios de referencia. Confirma disponibilidad y total final al ordenar.
-            </p>
-          </div>
+          <p className="max-w-sm text-xs leading-5 text-ink/45">
+            Precios de referencia. Confirma disponibilidad y total final al ordenar.
+          </p>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-9 grid gap-3 md:grid-cols-2">
           {products.map((product) => (
             <article
               key={product.name}
-              className="group overflow-hidden rounded-[28px] border border-forest/10 bg-white shadow-card transition duration-300 hover:-translate-y-1"
+              className="rounded-[22px] border border-forest/10 bg-white px-5 py-5 transition hover:border-forest/25 hover:shadow-card sm:px-6"
             >
-              <div
-                role="img"
-                aria-label={`Fotografía de ${product.name} de MO Vida`}
-                className="aspect-[4/3] bg-[#e8eddb] bg-cover bg-center bg-no-repeat transition duration-500 group-hover:scale-[1.015]"
-                style={{
-                  backgroundImage: `url(${PRODUCT_SPRITE})`,
-                  backgroundSize: "300% 200%",
-                  backgroundPosition: product.position,
-                }}
-              />
-
-              <div className="p-5 sm:p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl font-black text-forest">{product.name}</h3>
-                    <p className="mt-1 text-xs font-semibold text-ink/40">{product.size}</p>
+              <div className="flex items-start justify-between gap-5">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <h3 className="text-lg font-black text-forest">{product.name}</h3>
+                    <span className="text-[11px] font-semibold uppercase tracking-[.09em] text-ink/35">{product.size}</span>
                   </div>
-                  <p className="shrink-0 text-lg font-black text-forest">RD${product.price}</p>
+                  <p className="mt-2 text-sm leading-6 text-ink/55">{product.ingredients}</p>
                 </div>
-
-                <p className="mt-4 text-sm leading-6 text-ink/60">{product.ingredients}</p>
-
-                <a
-                  href={`https://wa.me/${PHONE}?text=${encodeURIComponent(productMessage(product))}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-black text-forest transition hover:text-leaf"
-                  aria-label={`Pedir ${product.name} por WhatsApp`}
-                >
-                  Pedir <ArrowRight size={16} />
-                </a>
+                <p className="shrink-0 text-lg font-black text-forest">RD${product.price}</p>
               </div>
+
+              <a
+                href={`https://wa.me/${PHONE}?text=${encodeURIComponent(productMessage(product))}`}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-black text-forest transition hover:text-leaf"
+                aria-label={`Pedir ${product.name} por WhatsApp`}
+              >
+                Pedir <ArrowRight size={15} />
+              </a>
             </article>
           ))}
         </div>
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-[26px] bg-forest px-6 py-6 text-white sm:flex-row sm:items-center sm:px-8">
+        <div className="mt-6 flex flex-col items-start justify-between gap-4 rounded-[22px] bg-forest px-6 py-5 text-white sm:flex-row sm:items-center">
           <div>
-            <p className="font-black">¿Quieres que te recomendemos uno?</p>
-            <p className="mt-1 text-sm text-white/65">Cuéntanos qué sabores prefieres y te orientamos por WhatsApp.</p>
+            <p className="font-black">¿No sabes cuál elegir?</p>
+            <p className="mt-1 text-sm text-white/65">Te ayudamos por WhatsApp según los sabores que prefieras.</p>
           </div>
           <a
             href={`https://wa.me/${PHONE}?text=${encodeURIComponent("Hola MO Vida 👋 Estoy viendo el menú y quiero una recomendación. ¿Qué jugo o combo me sugieren?")}`}
