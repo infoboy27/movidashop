@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowLeft, ArrowRight, Check, MessageCircle, Sparkles } from "lucide-react";
 import { TRANSFORMATION_IMAGE } from "./transformationImage";
+import { TRANSFORMATION_IMAGE_2 } from "./transformationImage2";
 
 const PHONE = "18296826461";
 
@@ -14,7 +15,7 @@ const stories = [
     label: "Historia 01",
   },
   {
-    src: "/transformation-before-after-2.webp",
+    src: TRANSFORMATION_IMAGE_2,
     alt: "Segunda comparación visual de una transformación personal compartida como inspiración",
     label: "Historia 02",
   },
@@ -69,7 +70,7 @@ export default function TransformationPortal() {
                 src={stories[activeStory].src}
                 alt={stories[activeStory].alt}
                 className="aspect-[1.04/1] w-full object-cover transition duration-700 group-hover:scale-[1.015]"
-                loading={activeStory === 0 ? "eager" : "lazy"}
+                loading="eager"
                 decoding="async"
               />
 
