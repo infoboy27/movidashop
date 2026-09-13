@@ -25,6 +25,10 @@ a:focus-visible,button:focus-visible{outline:3px solid rgba(118,155,85,.65);outl
 #nosotros+section>div>div:nth-child(2)>p:last-child::after{content:"Lun–Vie 8:00 AM–11:00 PM · Sáb 8:00 AM–7:00 PM · Dom 8:00 AM–10:00 PM";font-size:.875rem;line-height:1.5rem}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
 @keyframes pulseSoft{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.30)}50%{box-shadow:0 0 0 15px rgba(37,211,102,0)}}
+@media(max-width:767px){
+  main{padding-bottom:calc(7rem + env(safe-area-inset-bottom))!important}
+  main>div.fixed.inset-x-0.bottom-0{padding-bottom:calc(.75rem + env(safe-area-inset-bottom))!important}
+}
 @media(max-width:639px){
   html{scroll-padding-top:82px}
   section[id]{scroll-margin-top:82px}
