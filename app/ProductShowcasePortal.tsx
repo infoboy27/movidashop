@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowRight, MessageCircle } from "lucide-react";
+import { createWebpObjectUrl, SABORES_CHUNKS } from "./generatedVisuals";
 
 const PHONE = "18296826461";
 
@@ -28,6 +29,7 @@ function productMessage(product: Product) {
 
 export default function ProductShowcasePortal() {
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
+  const [showcaseSrc, setShowcaseSrc] = useState("");
 
   useEffect(() => {
     const legacyMenu = document.getElementById("menu");
@@ -41,6 +43,14 @@ export default function ProductShowcasePortal() {
     legacyMenu.style.display = "none";
     if (legacyOrderSection) legacyOrderSection.style.display = "none";
 
+    let objectUrl = "";
+    try {
+      objectUrl = createWebpObjectUrl(SABORES_CHUNKS);
+      setShowcaseSrc(objectUrl);
+    } catch (error) {
+      console.error("Could not prepare MO Vida product visual", error);
+    }
+
     const node = document.createElement("div");
     node.id = "product-showcase-portal-root";
     legacyMenu.parentElement.insertBefore(node, legacyMenu);
@@ -50,6 +60,7 @@ export default function ProductShowcasePortal() {
       legacyMenu.id = "menu";
       legacyMenu.style.display = previousMenuDisplay;
       if (legacyOrderSection) legacyOrderSection.style.display = previousOrderDisplay;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
       node.remove();
     };
   }, []);
@@ -76,7 +87,17 @@ export default function ProductShowcasePortal() {
           </div>
         </div>
 
-        <div className="mt-9 grid gap-3 md:grid-cols-2">
+        {showcaseSrc ? (
+          <div className="mt-9 overflow-hidden rounded-[28px] border border-forest/10 bg-white p-2 shadow-card">
+            <img
+              src={showcaseSrc}
+              alt="Sabores MO Vida: selección visual de jugos y combos"
+              className="w-full rounded-[22px] object-cover"
+            />
+          </div>
+        ) : null}
+
+        <div className="mt-6 grid gap-3 md:grid-cols-2">
           {products.map((product) => (
             <article
               key={product.name}
