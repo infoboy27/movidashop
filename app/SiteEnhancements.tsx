@@ -29,12 +29,14 @@ function replaceAboutIllustration() {
   const previousBackgroundSize = visual.style.backgroundSize;
   const previousBackgroundPosition = visual.style.backgroundPosition;
   const previousBackgroundRepeat = visual.style.backgroundRepeat;
+  const previousMinHeight = visual.style.minHeight;
 
   children.forEach((child) => {
     child.style.display = "none";
   });
 
   visual.dataset.realProductApplied = "true";
+  visual.style.minHeight = "470px";
   visual.style.backgroundImage = `url(${PRODUCT_SPRITE})`;
   visual.style.backgroundSize = "300% 200%";
   visual.style.backgroundPosition = "50% 100%";
@@ -45,6 +47,7 @@ function replaceAboutIllustration() {
       child.style.display = previousDisplays[index];
     });
     delete visual.dataset.realProductApplied;
+    visual.style.minHeight = previousMinHeight;
     visual.style.backgroundImage = previousBackgroundImage;
     visual.style.backgroundSize = previousBackgroundSize;
     visual.style.backgroundPosition = previousBackgroundPosition;
