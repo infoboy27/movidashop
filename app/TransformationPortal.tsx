@@ -50,7 +50,8 @@ export default function TransformationPortal() {
                 src={TRANSFORMATION_IMAGE}
                 alt="Comparación visual de una transformación personal compartida como inspiración"
                 className="aspect-[1.064/1] w-full object-cover transition duration-700 group-hover:scale-[1.015]"
-                loading="lazy"
+                loading="eager"
+                decoding="async"
               />
 
               <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between p-4 sm:p-5">
