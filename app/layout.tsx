@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ProductShowcasePortal from "./ProductShowcasePortal";
 import TransformationPortal from "./TransformationPortal";
 
 const SITE_URL = "https://movidashop.vercel.app";
@@ -91,6 +92,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="es">
       <body>
         {children}
+        <ProductShowcasePortal />
         <TransformationPortal />
         <script
           type="application/ld+json"
