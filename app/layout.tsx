@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
+import HeroUpgrade from "./HeroUpgrade";
 import ProductShowcasePortal from "./ProductShowcasePortal";
 import SiteEnhancements from "./SiteEnhancements";
 import TransformationPortal from "./TransformationPortal";
 
 const SITE_URL = "https://movidashop.vercel.app";
+const UBER_EATS_URL = "https://www.ubereats.com/do/store/mo-vida-sdq-santo-domingo/Ux3gzl0OQWSzHs6xKJPwdw";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -42,15 +44,44 @@ export const metadata: Metadata = {
   },
 };
 
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "FoodEstablishment",
+  name: "MO Vida",
+  url: SITE_URL,
+  description: "Jugos naturales, smoothies, protein shakes, shots funcionales y combos en Santo Domingo.",
+  telephone: "+1-829-682-6461",
+  priceRange: "RD$",
+  servesCuisine: ["Healthy", "Juice", "Smoothies"],
+  areaServed: "Santo Domingo, Dominican Republic",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Esther Rosario 32",
+    addressLocality: "Santo Domingo",
+    addressRegion: "Distrito Nacional",
+    addressCountry: "DO",
+  },
+  hasMenu: UBER_EATS_URL,
+  sameAs: [
+    "https://www.instagram.com/movidasdq/",
+    UBER_EATS_URL,
+  ],
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
       <body>
         {children}
+        <HeroUpgrade />
         <ProductShowcasePortal />
         <TransformationPortal />
         <SiteEnhancements />
         <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
+        />
       </body>
     </html>
   );
