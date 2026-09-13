@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowRight, MessageCircle } from "lucide-react";
-import { SABORES_VISUAL } from "./generatedVisuals";
+import { createWebpObjectUrl, SABORES_CHUNKS } from "./generatedVisuals";
 
 const PHONE = "18296826461";
 
@@ -29,6 +29,7 @@ function productMessage(product: Product) {
 
 export default function ProductShowcasePortal() {
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
+  const [showcaseSrc, setShowcaseSrc] = useState("");
 
   useEffect(() => {
     const legacyMenu = document.getElementById("menu");
@@ -42,11 +43,8 @@ export default function ProductShowcasePortal() {
     legacyMenu.style.display = "none";
     if (legacyOrderSection) legacyOrderSection.style.display = "none";
 
-    const existing = document.getElementById("product-showcase-portal-root");
-    if (existing) {
-      setMountNode(existing);
-      return;
-    }
+    const objectUrl = createWebpObjectUrl(SABORES_CHUNKS);
+    setShowcaseSrc(objectUrl);
 
     const node = document.createElement("div");
     node.id = "product-showcase-portal-root";
@@ -57,6 +55,7 @@ export default function ProductShowcasePortal() {
       legacyMenu.id = "menu";
       legacyMenu.style.display = previousMenuDisplay;
       if (legacyOrderSection) legacyOrderSection.style.display = previousOrderDisplay;
+      URL.revokeObjectURL(objectUrl);
       node.remove();
     };
   }, []);
@@ -83,13 +82,15 @@ export default function ProductShowcasePortal() {
           </div>
         </div>
 
-        <div className="mt-9 overflow-hidden rounded-[28px] border border-forest/10 bg-white p-2 shadow-card">
-          <img
-            src={SABORES_VISUAL}
-            alt="Sabores MO Vida: selección visual de jugos y combos"
-            className="w-full rounded-[22px] object-cover"
-          />
-        </div>
+        {showcaseSrc ? (
+          <div className="mt-9 overflow-hidden rounded-[28px] border border-forest/10 bg-white p-2 shadow-card">
+            <img
+              src={showcaseSrc}
+              alt="Sabores MO Vida: selección visual de jugos y combos"
+              className="w-full rounded-[22px] object-cover"
+            />
+          </div>
+        ) : null}
 
         <div className="mt-6 grid gap-3 md:grid-cols-2">
           {products.map((product) => (
