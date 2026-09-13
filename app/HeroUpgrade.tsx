@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { PRODUCT_SPRITE } from "./productSprite";
+import { MessageCircle } from "lucide-react";
+
+const PHONE = "18296826461";
 
 export default function HeroUpgrade() {
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
@@ -37,27 +39,25 @@ export default function HeroUpgrade() {
   if (!mountNode) return null;
 
   return createPortal(
-    <div className="flex h-full items-center justify-center bg-[#dfe8d3] p-5 sm:p-8">
-      <div className="grid w-full max-w-[560px] items-center gap-6 rounded-[34px] bg-[#f7f2e7] p-5 shadow-card sm:grid-cols-[220px_1fr] sm:p-6">
-        <div className="mx-auto w-[210px] sm:w-[220px]">
-          <div
-            role="img"
-            aria-label="Combo Tropical de MO Vida"
-            className="aspect-[3/4] w-full rounded-[26px] bg-cover bg-center bg-no-repeat shadow-soft"
-            style={{
-              backgroundImage: `url(${PRODUCT_SPRITE})`,
-              backgroundSize: "300% 200%",
-              backgroundPosition: "0% 0%",
-            }}
-          />
-        </div>
+    <div className="relative flex h-full items-center justify-center overflow-hidden bg-[#dfe8d3] p-6 sm:p-9">
+      <div className="absolute -left-14 -top-12 h-48 w-48 rounded-full bg-[#f0cc69]/35 blur-2xl" />
+      <div className="absolute -bottom-14 -right-10 h-52 w-52 rounded-full bg-leaf/20 blur-2xl" />
 
-        <div className="text-center sm:text-left">
-          <p className="text-[10px] font-black uppercase tracking-[.18em] text-leaf">Producto destacado</p>
-          <h3 className="display-font mt-2 text-3xl leading-none text-forest">Combo Tropical</h3>
-          <p className="mt-3 text-sm leading-6 text-ink/55">Jugo Tropical + Shot Detox</p>
-          <div className="mt-4 inline-flex rounded-full bg-white px-4 py-2 text-sm font-black text-forest shadow-sm">RD$250</div>
-        </div>
+      <div className="relative w-full max-w-[540px] rounded-[36px] border border-white/70 bg-[#f7f2e7]/95 p-8 text-center shadow-soft sm:p-10">
+        <img src="/movida-logo.svg" alt="MO Vida" className="mx-auto h-20 w-auto sm:h-24" />
+        <p className="mt-7 text-[10px] font-black uppercase tracking-[.2em] text-leaf">Producto destacado</p>
+        <h3 className="display-font mt-2 text-4xl leading-none text-forest sm:text-5xl">Combo Tropical</h3>
+        <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-ink/55">Jugo Tropical + Shot Detox · práctico, fresco y listo para pedir.</p>
+        <div className="mt-5 inline-flex rounded-full bg-white px-4 py-2 text-sm font-black text-forest shadow-sm">RD$250</div>
+
+        <a
+          href={`https://wa.me/${PHONE}?text=${encodeURIComponent("Hola MO Vida 👋 Vi el Combo Tropical en la web y quiero pedirlo. ¿Está disponible hoy?")}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#18492f]"
+        >
+          <MessageCircle size={17} /> Pedir Combo Tropical
+        </a>
       </div>
     </div>,
     mountNode,
