@@ -62,18 +62,28 @@ jobs:
             page.on('requestfailed', req => failedRequests.push({ url: req.url(), error: req.failure()?.errorText }));
 
             const response = await page.goto('https://movidashop.vercel.app/', { waitUntil: 'networkidle', timeout: 60000 });
-            await page.waitForTimeout(1200);
+            await page.waitForTimeout(1500);
 
-            const metrics = await page.evaluate(() => ({
-              title: document.title,
-              h1: document.querySelector('h1')?.textContent?.trim() || '',
-              bodyWidth: document.body.scrollWidth,
-              viewportWidth: window.innerWidth,
-              overflowX: document.body.scrollWidth > window.innerWidth,
-              links: Array.from(document.querySelectorAll('a')).map(a => ({ text: (a.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80), href: a.href })).filter(x => x.href),
-              buttons: Array.from(document.querySelectorAll('button')).map(b => ({ text: (b.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80), aria: b.getAttribute('aria-label') })),
-              images: Array.from(document.images).map(img => ({ src: img.currentSrc || img.src, alt: img.alt, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight })),
-            }));
+            const metrics = await page.evaluate(() => {
+              const images = Array.from(document.images).map(img => ({
+                src: img.currentSrc || img.src,
+                alt: img.alt,
+                naturalWidth: img.naturalWidth,
+                naturalHeight: img.naturalHeight,
+                complete: img.complete,
+              }));
+              return {
+                title: document.title,
+                h1: document.querySelector('h1')?.textContent?.trim() || '',
+                bodyWidth: document.body.scrollWidth,
+                viewportWidth: window.innerWidth,
+                overflowX: document.body.scrollWidth > window.innerWidth,
+                links: Array.from(document.querySelectorAll('a')).map(a => ({ text: (a.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80), href: a.href })).filter(x => x.href),
+                buttons: Array.from(document.querySelectorAll('button')).map(b => ({ text: (b.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80), aria: b.getAttribute('aria-label') })),
+                images,
+                brokenImages: images.filter(img => img.complete && (!img.naturalWidth || !img.naturalHeight)),
+              };
+            });
 
             await page.screenshot({ path: `audit/${target.name}-full.png`, fullPage: true });
             await page.screenshot({ path: `audit/${target.name}-fold.png`, fullPage: false });
@@ -84,7 +94,7 @@ jobs:
               const nextStory = page.getByRole('button', { name: 'Ver siguiente historia' });
               if (await nextStory.count()) {
                 await nextStory.click();
-                await page.waitForTimeout(1000);
+                await page.waitForTimeout(800);
                 const storyImage = storySection.locator('img').first();
                 results[`${target.name}SecondStory`] = await storyImage.evaluate(img => ({
                   src: img.currentSrc || img.src,
@@ -103,12 +113,6 @@ jobs:
                 await page.waitForTimeout(500);
                 await page.screenshot({ path: 'audit/desktop-menu.png', fullPage: false });
               }
-              const addButton = page.getByRole('button', { name: /Agregar/i }).first();
-              if (await addButton.count()) {
-                await addButton.click();
-                await page.waitForTimeout(350);
-                await page.screenshot({ path: 'audit/desktop-cart.png', fullPage: false });
-              }
             }
 
             results[target.name] = {
@@ -122,11 +126,25 @@ jobs:
           }
 
           fs.writeFileSync('audit/report.json', JSON.stringify(results, null, 2));
+
+          const failures = [];
+          for (const target of ['desktop', 'mobile']) {
+            const result = results[target];
+            if (!result) continue;
+            if (result.status !== 200) failures.push(`${target}: HTTP ${result.status}`);
+            if (result.overflowX) failures.push(`${target}: horizontal overflow`);
+            if (result.brokenImages?.length) failures.push(`${target}: ${result.brokenImages.length} broken image(s)`);
+            const invalidUrls = (result.consoleErrors || []).filter(error => error.includes('ERR_INVALID_URL'));
+            if (invalidUrls.length) failures.push(`${target}: ${invalidUrls.length} invalid image URL error(s)`);
+          }
+
           await browser.close();
+          if (failures.length) throw new Error(`Visual audit failed: ${failures.join('; ')}`);
           EOF
           node audit-run.mjs
 
       - name: Upload audit artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: movida-visual-audit
