@@ -25,7 +25,8 @@ jobs:
         run: |
           for i in {1..18}; do
             if curl -fsS --max-time 15 https://movidashop.vercel.app/ | grep -qi "MO Vida"; then
-              echo "Production is ready"
+              echo "Production responds; allowing the production alias to settle"
+              sleep 35
               exit 0
             fi
             echo "Waiting for deployment... ($i/18)"
