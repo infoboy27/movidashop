@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { createWebpObjectUrl, HERO_CHUNKS } from "./generatedVisuals";
 
 export default function HeroUpgrade() {
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
-  const [heroSrc, setHeroSrc] = useState("");
 
   useEffect(() => {
     const hero = document.getElementById("inicio");
@@ -19,15 +17,6 @@ export default function HeroUpgrade() {
     ) as HTMLElement[];
     const previousDisplays = overlays.map((element) => element.style.display);
     const previousOpacity = image.style.opacity;
-
-    let objectUrl = "";
-    try {
-      objectUrl = createWebpObjectUrl(HERO_CHUNKS);
-      setHeroSrc(objectUrl);
-    } catch (error) {
-      console.error("Could not prepare MO Vida hero visual", error);
-      return;
-    }
 
     image.style.opacity = "0";
     overlays.forEach((element) => {
@@ -45,28 +34,19 @@ export default function HeroUpgrade() {
       overlays.forEach((element, index) => {
         element.style.display = previousDisplays[index];
       });
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
       node.remove();
     };
   }, []);
 
-  if (!mountNode || !heroSrc) return null;
+  if (!mountNode) return null;
 
   return createPortal(
-    <div className="flex h-full w-full flex-col justify-center overflow-hidden bg-[#eef1e5] p-3 sm:p-5">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden bg-[#e7ecd9] p-4 sm:p-7">
       <img
-        src={heroSrc}
-        alt="MO Vida: jugos naturales y opciones de pedido por WhatsApp, PedidosYa y Uber Eats"
-        className="w-full rounded-[30px] object-contain shadow-card"
-        onError={(event) => {
-          event.currentTarget.style.display = "none";
-        }}
+        src="/hero-bottles.svg"
+        alt="Selección de jugos MO Vida"
+        className="h-full w-full object-contain"
       />
-      <div className="mt-4 grid grid-cols-3 gap-2 text-center text-[10px] font-black text-forest sm:text-xs">
-        <span className="rounded-full bg-white px-2 py-2 shadow-sm sm:px-3">WhatsApp</span>
-        <span className="rounded-full bg-white px-2 py-2 shadow-sm sm:px-3">PedidosYa</span>
-        <span className="rounded-full bg-white px-2 py-2 shadow-sm sm:px-3">Uber Eats</span>
-      </div>
     </div>,
     mountNode,
   );
