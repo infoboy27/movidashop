@@ -59,6 +59,7 @@ jobs:
             const consoleErrors = [];
             const failedRequests = [];
             page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
+            page.on('pageerror', error => consoleErrors.push(`pageerror: ${error.message}`));
             page.on('requestfailed', req => failedRequests.push({ url: req.url(), error: req.failure()?.errorText }));
 
             const response = await page.goto('https://movidashop.vercel.app/', { waitUntil: 'networkidle', timeout: 60000 });
@@ -72,9 +73,11 @@ jobs:
                 naturalHeight: img.naturalHeight,
                 complete: img.complete,
               }));
+              const bodyText = document.body.innerText || '';
               return {
                 title: document.title,
                 h1: document.querySelector('h1')?.textContent?.trim() || '',
+                bodyPreview: bodyText.slice(0, 500),
                 bodyWidth: document.body.scrollWidth,
                 viewportWidth: window.innerWidth,
                 overflowX: document.body.scrollWidth > window.innerWidth,
@@ -130,12 +133,18 @@ jobs:
           const failures = [];
           for (const target of ['desktop', 'mobile']) {
             const result = results[target];
-            if (!result) continue;
+            if (!result) {
+              failures.push(`${target}: no result captured`);
+              continue;
+            }
             if (result.status !== 200) failures.push(`${target}: HTTP ${result.status}`);
+            if (!result.h1) failures.push(`${target}: missing H1/app content`);
+            if (!result.links?.length) failures.push(`${target}: no links rendered`);
+            if ((result.bodyPreview || '').includes('Application error')) failures.push(`${target}: Next.js application error rendered`);
             if (result.overflowX) failures.push(`${target}: horizontal overflow`);
             if (result.brokenImages?.length) failures.push(`${target}: ${result.brokenImages.length} broken image(s)`);
-            const invalidUrls = (result.consoleErrors || []).filter(error => error.includes('ERR_INVALID_URL'));
-            if (invalidUrls.length) failures.push(`${target}: ${invalidUrls.length} invalid image URL error(s)`);
+            if (result.consoleErrors?.length) failures.push(`${target}: ${result.consoleErrors.length} console/page error(s)`);
+            if (result.failedRequests?.length) failures.push(`${target}: ${result.failedRequests.length} failed request(s)`);
           }
 
           await browser.close();
