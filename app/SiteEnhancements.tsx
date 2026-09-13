@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { track } from "@vercel/analytics";
-import { BRAND_VISUAL } from "./generatedVisuals";
+import { BRAND_CHUNKS, createWebpObjectUrl } from "./generatedVisuals";
 
 function classifyConversion(element: Element) {
   const anchor = element.closest("a") as HTMLAnchorElement | null;
@@ -17,7 +17,7 @@ function classifyConversion(element: Element) {
   return null;
 }
 
-function replaceAboutVisual() {
+function replaceAboutVisual(brandSrc: string) {
   const about = document.getElementById("nosotros");
   const grid = about?.querySelector(":scope > div.grid");
   const visual = grid?.firstElementChild as HTMLElement | null;
@@ -39,7 +39,7 @@ function replaceAboutVisual() {
   visual.dataset.generatedVisualApplied = "true";
   visual.style.minHeight = "470px";
   visual.style.backgroundColor = "#f6f0e3";
-  visual.style.backgroundImage = `url("${BRAND_VISUAL}")`;
+  visual.style.backgroundImage = `url("${brandSrc}")`;
   visual.style.backgroundSize = "cover";
   visual.style.backgroundPosition = "center";
   visual.style.backgroundRepeat = "no-repeat";
@@ -60,7 +60,8 @@ function replaceAboutVisual() {
 
 export default function SiteEnhancements() {
   useEffect(() => {
-    const restoreAbout = replaceAboutVisual();
+    const brandSrc = createWebpObjectUrl(BRAND_CHUNKS);
+    const restoreAbout = replaceAboutVisual(brandSrc);
 
     const onClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
@@ -77,6 +78,7 @@ export default function SiteEnhancements() {
     document.addEventListener("click", onClick, true);
     return () => {
       restoreAbout();
+      URL.revokeObjectURL(brandSrc);
       document.removeEventListener("click", onClick, true);
     };
   }, []);
