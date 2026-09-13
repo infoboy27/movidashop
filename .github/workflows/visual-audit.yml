@@ -70,12 +70,30 @@ jobs:
               viewportWidth: window.innerWidth,
               overflowX: document.body.scrollWidth > window.innerWidth,
               links: Array.from(document.querySelectorAll('a')).map(a => ({ text: (a.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80), href: a.href })).filter(x => x.href),
-              buttons: Array.from(document.querySelectorAll('button')).map(b => (b.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80)),
+              buttons: Array.from(document.querySelectorAll('button')).map(b => ({ text: (b.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80), aria: b.getAttribute('aria-label') })),
               images: Array.from(document.images).map(img => ({ src: img.currentSrc || img.src, alt: img.alt, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight })),
             }));
 
             await page.screenshot({ path: `audit/${target.name}-full.png`, fullPage: true });
             await page.screenshot({ path: `audit/${target.name}-fold.png`, fullPage: false });
+
+            const storySection = page.locator('#historias');
+            if (await storySection.count()) {
+              await storySection.scrollIntoViewIfNeeded();
+              const nextStory = page.getByRole('button', { name: 'Ver siguiente historia' });
+              if (await nextStory.count()) {
+                await nextStory.click();
+                await page.waitForTimeout(1000);
+                const storyImage = storySection.locator('img').first();
+                results[`${target.name}SecondStory`] = await storyImage.evaluate(img => ({
+                  src: img.currentSrc || img.src,
+                  naturalWidth: img.naturalWidth,
+                  naturalHeight: img.naturalHeight,
+                  complete: img.complete,
+                }));
+                await storySection.screenshot({ path: `audit/${target.name}-story-2.png` });
+              }
+            }
 
             if (target.name === 'desktop') {
               const menuAnchor = page.locator('a[href="#menu"]').first();
