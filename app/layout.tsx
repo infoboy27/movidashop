@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const SITE_URL = "https://movidashop.vercel.app";
+const UBER_EATS_URL = "https://www.ubereats.com/do/store/mo-vida-sdq-santo-domingo/Ux3gzl0OQWSzHs6xKJPwdw";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -45,9 +46,11 @@ const businessSchema = {
   "@type": "FoodEstablishment",
   name: "MO Vida",
   url: SITE_URL,
+  hasMenu: UBER_EATS_URL,
   description: "Jugos naturales, protein shakes, shots funcionales, combos y desayunos en Santo Domingo.",
   telephone: "+1-829-682-6461",
   priceRange: "RD$",
+  areaServed: "Santo Domingo, Dominican Republic",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Esther Rosario 32",
@@ -55,10 +58,30 @@ const businessSchema = {
     addressRegion: "Distrito Nacional",
     addressCountry: "DO",
   },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "08:00",
+      closes: "23:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "08:00",
+      closes: "19:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: "08:00",
+      closes: "22:00",
+    },
+  ],
   servesCuisine: ["Healthy", "Juice", "Smoothies"],
   sameAs: [
     "https://www.instagram.com/movidasdq/",
-    "https://www.ubereats.com/do/store/mo-vida-sdq-santo-domingo/Ux3gzl0OQWSzHs6xKJPwdw",
+    UBER_EATS_URL,
   ],
 };
 
