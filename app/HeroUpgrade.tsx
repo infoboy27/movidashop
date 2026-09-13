@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { HERO_VISUAL } from "./generatedVisuals";
+import { createWebpObjectUrl, HERO_CHUNKS } from "./generatedVisuals";
 
 export default function HeroUpgrade() {
   const [mountNode, setMountNode] = useState<HTMLElement | null>(null);
+  const [heroSrc, setHeroSrc] = useState("");
 
   useEffect(() => {
     const hero = document.getElementById("inicio");
@@ -19,16 +20,13 @@ export default function HeroUpgrade() {
     const previousDisplays = overlays.map((element) => element.style.display);
     const previousOpacity = image.style.opacity;
 
+    const objectUrl = createWebpObjectUrl(HERO_CHUNKS);
+    setHeroSrc(objectUrl);
+
     image.style.opacity = "0";
     overlays.forEach((element) => {
       element.style.display = "none";
     });
-
-    const existing = document.getElementById("hero-upgrade-portal-root");
-    if (existing) {
-      setMountNode(existing);
-      return;
-    }
 
     const node = document.createElement("div");
     node.id = "hero-upgrade-portal-root";
@@ -41,16 +39,17 @@ export default function HeroUpgrade() {
       overlays.forEach((element, index) => {
         element.style.display = previousDisplays[index];
       });
+      URL.revokeObjectURL(objectUrl);
       node.remove();
     };
   }, []);
 
-  if (!mountNode) return null;
+  if (!mountNode || !heroSrc) return null;
 
   return createPortal(
     <div className="flex h-full w-full flex-col justify-center overflow-hidden bg-[#eef1e5] p-3 sm:p-5">
       <img
-        src={HERO_VISUAL}
+        src={heroSrc}
         alt="MO Vida: jugos naturales y opciones de pedido por WhatsApp, PedidosYa y Uber Eats"
         className="w-full rounded-[30px] object-contain shadow-card"
       />
