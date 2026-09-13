@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { track } from "@vercel/analytics";
-import { BRAND_CHUNKS, createWebpObjectUrl } from "./generatedVisuals";
 
 function classifyConversion(element: Element) {
   const anchor = element.closest("a") as HTMLAnchorElement | null;
@@ -17,11 +16,11 @@ function classifyConversion(element: Element) {
   return null;
 }
 
-function replaceAboutVisual(brandSrc: string) {
+function simplifyAboutVisual() {
   const about = document.getElementById("nosotros");
   const grid = about?.querySelector(":scope > div.grid");
   const visual = grid?.firstElementChild as HTMLElement | null;
-  if (!visual || visual.dataset.generatedVisualApplied === "true") return () => {};
+  if (!visual || visual.dataset.logoVisualApplied === "true") return () => {};
 
   const children = Array.from(visual.children) as HTMLElement[];
   const previousDisplays = children.map((child) => child.style.display);
@@ -36,11 +35,11 @@ function replaceAboutVisual(brandSrc: string) {
     child.style.display = "none";
   });
 
-  visual.dataset.generatedVisualApplied = "true";
-  visual.style.minHeight = "470px";
-  visual.style.backgroundColor = "#f6f0e3";
-  visual.style.backgroundImage = `url("${brandSrc}")`;
-  visual.style.backgroundSize = "cover";
+  visual.dataset.logoVisualApplied = "true";
+  visual.style.minHeight = "360px";
+  visual.style.backgroundColor = "#e8eddc";
+  visual.style.backgroundImage = "url('/movida-logo.svg')";
+  visual.style.backgroundSize = "58% auto";
   visual.style.backgroundPosition = "center";
   visual.style.backgroundRepeat = "no-repeat";
 
@@ -48,7 +47,7 @@ function replaceAboutVisual(brandSrc: string) {
     children.forEach((child, index) => {
       child.style.display = previousDisplays[index];
     });
-    delete visual.dataset.generatedVisualApplied;
+    delete visual.dataset.logoVisualApplied;
     visual.style.minHeight = previousMinHeight;
     visual.style.backgroundColor = previousBackgroundColor;
     visual.style.backgroundImage = previousBackgroundImage;
@@ -60,8 +59,7 @@ function replaceAboutVisual(brandSrc: string) {
 
 export default function SiteEnhancements() {
   useEffect(() => {
-    const brandSrc = createWebpObjectUrl(BRAND_CHUNKS);
-    const restoreAbout = replaceAboutVisual(brandSrc);
+    const restoreAbout = simplifyAboutVisual();
 
     const onClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
@@ -78,7 +76,6 @@ export default function SiteEnhancements() {
     document.addEventListener("click", onClick, true);
     return () => {
       restoreAbout();
-      URL.revokeObjectURL(brandSrc);
       document.removeEventListener("click", onClick, true);
     };
   }, []);
