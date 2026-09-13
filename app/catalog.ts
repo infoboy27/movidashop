@@ -173,6 +173,14 @@ export const catalog: CatalogItem[] = [
     badge: "Destacado",
     tone: "from-[#B5B56A] to-[#717843]",
   },
+  {
+    id: "mangu-mauro-fit",
+    name: "Mangú Plátano Mauro Fit",
+    category: "Desayunos",
+    description: "Otra opción de mangú fit disponible en el menú público de MO Vida.",
+    price: 390,
+    tone: "from-[#D7B56A] to-[#8B6D3E]",
+  },
 ];
 
 export const categories = ["Todos", "Jugos", "Protein Shakes", "Shots", "Combos", "Desayunos"] as const;
