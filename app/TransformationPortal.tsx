@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowRight, Check, MessageCircle, Sparkles } from "lucide-react";
+import { TRANSFORMATION_IMAGE } from "./transformationImage";
 
 const PHONE = "18296826461";
 
@@ -46,7 +47,7 @@ export default function TransformationPortal() {
           <div className="group relative overflow-hidden rounded-[34px] border border-white/80 bg-white p-2 shadow-soft sm:rounded-[42px] sm:p-3">
             <div className="relative overflow-hidden rounded-[28px] bg-[#dfe8d3] sm:rounded-[34px]">
               <img
-                src="/transformation-before-after.svg"
+                src={TRANSFORMATION_IMAGE}
                 alt="Comparación visual de una transformación personal compartida como inspiración"
                 className="aspect-[1.064/1] w-full object-cover transition duration-700 group-hover:scale-[1.015]"
                 loading="lazy"
