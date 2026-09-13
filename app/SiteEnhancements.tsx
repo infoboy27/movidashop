@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { track } from "@vercel/analytics";
+import { BRAND_VISUAL } from "./generatedVisuals";
 
 function classifyConversion(element: Element) {
   const anchor = element.closest("a") as HTMLAnchorElement | null;
@@ -16,11 +17,11 @@ function classifyConversion(element: Element) {
   return null;
 }
 
-function simplifyAboutVisual() {
+function replaceAboutVisual() {
   const about = document.getElementById("nosotros");
   const grid = about?.querySelector(":scope > div.grid");
   const visual = grid?.firstElementChild as HTMLElement | null;
-  if (!visual || visual.dataset.logoVisualApplied === "true") return () => {};
+  if (!visual || visual.dataset.generatedVisualApplied === "true") return () => {};
 
   const children = Array.from(visual.children) as HTMLElement[];
   const previousDisplays = children.map((child) => child.style.display);
@@ -35,11 +36,11 @@ function simplifyAboutVisual() {
     child.style.display = "none";
   });
 
-  visual.dataset.logoVisualApplied = "true";
-  visual.style.minHeight = "360px";
-  visual.style.backgroundColor = "#e8eddc";
-  visual.style.backgroundImage = "url('/movida-logo.svg')";
-  visual.style.backgroundSize = "58% auto";
+  visual.dataset.generatedVisualApplied = "true";
+  visual.style.minHeight = "470px";
+  visual.style.backgroundColor = "#f6f0e3";
+  visual.style.backgroundImage = `url("${BRAND_VISUAL}")`;
+  visual.style.backgroundSize = "cover";
   visual.style.backgroundPosition = "center";
   visual.style.backgroundRepeat = "no-repeat";
 
@@ -47,7 +48,7 @@ function simplifyAboutVisual() {
     children.forEach((child, index) => {
       child.style.display = previousDisplays[index];
     });
-    delete visual.dataset.logoVisualApplied;
+    delete visual.dataset.generatedVisualApplied;
     visual.style.minHeight = previousMinHeight;
     visual.style.backgroundColor = previousBackgroundColor;
     visual.style.backgroundImage = previousBackgroundImage;
@@ -59,7 +60,7 @@ function simplifyAboutVisual() {
 
 export default function SiteEnhancements() {
   useEffect(() => {
-    const restoreAbout = simplifyAboutVisual();
+    const restoreAbout = replaceAboutVisual();
 
     const onClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
