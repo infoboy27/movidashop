@@ -12,14 +12,16 @@ export const SABORES_CHUNKS = [sabores0, sabores1];
 export const BRAND_CHUNKS = [brand0, brand1];
 
 export function createWebpObjectUrl(chunks: string[]) {
-  const parts = chunks.map((chunk) => {
-    const binary = window.atob(chunk);
-    const bytes = new Uint8Array(binary.length);
-    for (let index = 0; index < binary.length; index += 1) {
-      bytes[index] = binary.charCodeAt(index);
-    }
-    return bytes;
-  });
+  // The image data was split only to keep the source files manageable.
+  // Reassemble the complete base64 string before decoding; decoding each
+  // fragment independently can throw when a fragment ends mid base64 group.
+  const base64 = chunks.join("");
+  const binary = window.atob(base64);
+  const bytes = new Uint8Array(binary.length);
 
-  return URL.createObjectURL(new Blob(parts, { type: "image/webp" }));
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return URL.createObjectURL(new Blob([bytes], { type: "image/webp" }));
 }
