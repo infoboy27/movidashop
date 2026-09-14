@@ -41,11 +41,11 @@ export default function HeroUpgrade() {
   if (!mountNode) return null;
 
   return createPortal(
-    <div className="flex h-full w-full items-center justify-center overflow-hidden bg-[#e7ecd9] p-4 sm:p-7">
+    <div className="flex h-full w-full items-center justify-center overflow-hidden bg-[#eef1e5] p-3 sm:p-5">
       <img
-        src="/hero-bottles.svg"
-        alt="Selección de jugos MO Vida"
-        className="h-full w-full object-contain"
+        src="/generated/hero.webp"
+        alt="MO Vida: jugos naturales y opciones de pedido por WhatsApp, PedidosYa y Uber Eats"
+        className="max-h-full w-full rounded-[30px] object-contain shadow-card"
       />
     </div>,
     mountNode,
