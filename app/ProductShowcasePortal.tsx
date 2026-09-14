@@ -76,7 +76,17 @@ export default function ProductShowcasePortal() {
           </div>
         </div>
 
-        <div className="mt-9 grid gap-3 md:grid-cols-2">
+        <div className="mt-9 overflow-hidden rounded-[28px] border border-forest/10 bg-white p-2 shadow-card">
+          <div className="aspect-[16/7] overflow-hidden rounded-[22px] bg-[#eef1e5]">
+            <img
+              src="/generated/sabores.webp"
+              alt="Sabores MO Vida: selección visual de jugos y combos"
+              className="h-full w-full object-cover object-center"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-3 md:grid-cols-2">
           {products.map((product) => (
             <article
               key={product.name}
