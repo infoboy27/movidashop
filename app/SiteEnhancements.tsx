@@ -24,12 +24,9 @@ function replaceAboutVisual() {
 
   const children = Array.from(visual.children) as HTMLElement[];
   const previousDisplays = children.map((child) => child.style.display);
-  const previousBackgroundImage = visual.style.backgroundImage;
-  const previousBackgroundSize = visual.style.backgroundSize;
-  const previousBackgroundPosition = visual.style.backgroundPosition;
-  const previousBackgroundRepeat = visual.style.backgroundRepeat;
   const previousBackgroundColor = visual.style.backgroundColor;
   const previousMinHeight = visual.style.minHeight;
+  const previousPadding = visual.style.padding;
 
   children.forEach((child) => {
     child.style.display = "none";
@@ -38,22 +35,24 @@ function replaceAboutVisual() {
   visual.dataset.generatedVisualApplied = "true";
   visual.style.minHeight = "470px";
   visual.style.backgroundColor = "#f6f0e3";
-  visual.style.backgroundImage = "url('/generated/brand.webp')";
-  visual.style.backgroundSize = "contain";
-  visual.style.backgroundPosition = "center";
-  visual.style.backgroundRepeat = "no-repeat";
+  visual.style.padding = "0";
+
+  const image = document.createElement("img");
+  image.src = "/generated/brand.webp";
+  image.alt = "MO Vida: jugos naturales frescos para tu día";
+  image.className = "h-full min-h-[470px] w-full object-contain object-center";
+  image.dataset.generatedBrandVisual = "true";
+  visual.appendChild(image);
 
   return () => {
+    image.remove();
     children.forEach((child, index) => {
       child.style.display = previousDisplays[index];
     });
     delete visual.dataset.generatedVisualApplied;
     visual.style.minHeight = previousMinHeight;
     visual.style.backgroundColor = previousBackgroundColor;
-    visual.style.backgroundImage = previousBackgroundImage;
-    visual.style.backgroundSize = previousBackgroundSize;
-    visual.style.backgroundPosition = previousBackgroundPosition;
-    visual.style.backgroundRepeat = previousBackgroundRepeat;
+    visual.style.padding = previousPadding;
   };
 }
 
